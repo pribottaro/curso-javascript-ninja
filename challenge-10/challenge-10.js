@@ -1,4 +1,4 @@
-/*
+(function(){/*
 Crie uma IIFE que envolva todo esse arquivo (inclusive esse comentário),
 e faça a indentação correta.
 */
@@ -174,3 +174,5 @@ var invalidSignal = calculator(operationSignal);
 	
 console.log(showOperationMessage(operationSignal, number1, number2),
 invalidSignal(number1, number2) !== false ? invalidSignal(number1, number2) : showErrorMessage(operationSignal) );
+
+})()
