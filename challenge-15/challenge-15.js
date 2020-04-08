@@ -1,4 +1,5 @@
 (function(){
+  'use-strict'
 /*
 Envolva todo o código desse desafio em uma IIFE.
 Crie um arquivo chamado index.html e adicione esse script ao HTML.
@@ -77,7 +78,7 @@ Mostre no console as idades de cada pessoa, com a frase:
 console.log( '\nIdade das pessoas:' );
 
 console.log(pessoa1.getFullName() + ' ' + 'tem ' + pessoa1.getAge() + ' ' + 'anos.');
-console.log(pessoa2.getFullName() + ' ' + 'tem ' + pessoa12.getAge() + ' ' + 'anos.');
+console.log(pessoa2.getFullName() + ' ' + 'tem ' + pessoa2.getAge() + ' ' + 'anos.');
 console.log(pessoa3.getFullName() + ' ' + 'tem ' + pessoa3.getAge() + ' ' + 'anos.');
 
 /*
