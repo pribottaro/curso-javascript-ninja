@@ -1,3 +1,5 @@
+(function() {
+  'use strict';
   /*
   No HTML:
   - Crie um formulário com um input de texto que receberá um CEP e um botão
@@ -25,3 +27,87 @@
   - Utilize a lib DOM criada anteriormente para facilitar a manipulação e
   adicionar as informações em tela.
   */
+  var $searchCEP = new DOM('[data-js="search-CEP"]');
+  var $btnSearchCEP = new DOM('[data-js="btn-search-CEP"]');
+  var $logradouro = new DOM('[data-js="logradouro"]');
+  var $bairro = new DOM('[data-js="bairro"]');
+  var $estado = new DOM('[data-js="estado"]');
+  var $cidade = new DOM('[data-js="cidade"]');
+  var $cep = new DOM('[data-js="cep"]');
+  var $status = new DOM('[data-js="status"]');
+  var ajax = new XMLHttpRequest();
+
+  $btnSearchCEP.on('click', handleBtnSearchCEP);
+
+  function handleBtnSearchCEP (event) {
+    event.preventDefault();
+    requestAJAX();
+  }
+
+  function requestAJAX () {
+    var url = `https://viacep.com.br/ws/${clearCEP()}/json/`
+    ajax.open('GET',url);
+    ajax.send();
+    getMessage('loading');
+    ajax.addEventListener('readystatechange', handleReadystatechange);
+  }
+
+  function clearCEP () {
+    return $searchCEP.get()[0].value.replace(/\D/g, '')
+  }
+
+  function handleReadystatechange() {
+    if ( isRequestOK() ) {
+      getMessage('ok');
+    }
+    fillCEPfields();
+  }
+
+  function isRequestOK () {
+    return ajax.readyState === 4 && ajax.status === 200;
+  }
+
+  function fillCEPfields () {
+    var data = parseData();
+    if (!data) {
+      getMessage('error');
+      data = clearData();
+    }
+
+    $logradouro.get()[0].value = data.logradouro;
+    $bairro.get()[0].value = data.bairro;
+    $estado.get()[0].value = data.uf;
+    $cidade.get()[0].value = data.localidade;
+    $cep.get()[0].value = data.cep;
+  }
+
+  function clearData () {
+    return {
+      logradouro: '-',
+      bairro: '-',
+      uf: '-',
+      localidade: '-',
+      cep: '-'
+    }
+  }
+
+  function parseData () {
+    var result;
+    try {
+      result = JSON.parse(ajax.responseText);
+    } catch (error) {
+      result = null;
+    }
+    return result;
+  }
+
+  function getMessage(type) {
+    var cep = clearCEP();
+    var messages = {
+      loading: `Buscando informações para o CEP ${cep}...`,
+      error: `Não encontramos o endereço para o CEP ${cep}.`,
+      ok: `Endereço referente ao CEP ${cep}: `,
+    };
+    $status.get()[0].textContent = messages[type];
+  }
+})();
